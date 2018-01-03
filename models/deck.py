@@ -1,6 +1,6 @@
-from card import Card
-from rank import Rank
-from suit import Suit
+from models.card import Card
+from models.rank import Rank
+from models.suit import Suit
 from random import shuffle
 
 class Deck(object):

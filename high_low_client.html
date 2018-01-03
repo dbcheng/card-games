@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>High Low</title>
+    </head>
+    <body>
+        <div>Score: </div>
+        <div id="score">0</div>
+        <script>
+            var ws = new WebSocket("ws://127.0.0.1:5678/"),
+                cards = document.createElement('div'),
+                highInput = document.createElement('input'),
+                lowInput = document.createElement('input');
+            ws.onmessage = function (event) {
+                var newCard = document.createElement('div'),
+                    scoreDiv = document.getElementById("score"),
+                    contentJson = JSON.parse(event.data),
+                    content = document.createTextNode("Last Card Seen: " + contentJson.card);
+
+                // Change to modal
+                if (content === "DONE") {
+                    console.log("Final Score " + contentJson.score)
+                }
+                scoreDiv.innerHTML = contentJson.score;
+                newCard.appendChild(content);
+                cards.appendChild(newCard);
+            };
+
+            highInput.type = "button";
+            highInput.value = "Higher";
+            highInput.addEventListener('click', function(){
+                ws.send("HIGH");
+            });
+
+            lowInput.type = "button";
+            lowInput.value = "Lower";
+            lowInput.addEventListener('click', function(){
+                ws.send("LOW");
+            });
+            document.body.appendChild(highInput);
+            document.body.appendChild(lowInput);
+            document.body.appendChild(cards);
+        </script>
+    </body>
+</html>
